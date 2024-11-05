@@ -3,16 +3,19 @@
 # Use the official Node.js image to build the React app
 FROM node:18 AS build
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
+
+# Set NODE_ENV to production (optional for optimized builds)
+ENV NODE_ENV=production
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application code to /app
 COPY . .
 
 # Build the React app

@@ -29,6 +29,11 @@ RUN ls -la /app/build
 
 # Use Nginx to serve the static files
 FROM nginx:alpine
+
+# Copy the /app directory from the build stage to the final image
+COPY --from=build /app /app
+
+# Copy the build output to the Nginx HTML directory
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 80 for the frontend

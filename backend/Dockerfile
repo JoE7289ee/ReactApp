@@ -1,22 +1,22 @@
-# Dockerfile
+# backend/Dockerfile
 
-# Use the official Node.js LTS image
+# Use the Node.js image
 FROM node:18
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Initialize a basic package.json if it doesn’t exist
-RUN npm init -y
+# Copy package.json and package-lock.json (if available)
+COPY package*.json ./
 
-# Install essential npm packages
-RUN npm install express pg dotenv nodemon --save
+# Install dependencies
+RUN npm install
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application code
 COPY . .
 
-# Expose the application port
+# Expose the backend port
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "index.js"]
+CMD ["npm", "start"]

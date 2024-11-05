@@ -1,43 +1,22 @@
 # frontend/Dockerfile
 
-# Use the official Node.js image to build the React app
-FROM node:18 AS build
+# Use the Node.js image to run the React development server
+FROM node:18
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package.json and package-lock.json for dependency installation
 COPY package*.json ./
-
-# Set NODE_ENV to production (optional for optimized builds)
-ENV NODE_ENV=production
 
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code to /app
+# Copy the rest of the application code
 COPY . .
 
-# Build the React app
-RUN npm run build
+# Expose port 3000 for the React development server
+EXPOSE 3000
 
-# Debug: List the contents of the /app directory
-RUN ls -la /app
-
-# Debug: List the contents of the /app/build directory
-RUN ls -la /app/build
-
-# Use Nginx to serve the static files
-FROM nginx:alpine
-
-# Copy the /app directory from the build stage to the final image
-COPY --from=build /app /app
-
-# Copy the build output to the Nginx HTML directory
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Expose port 80 for the frontend
-EXPOSE 80
-
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the React development server
+CMD ["npm", "start"]

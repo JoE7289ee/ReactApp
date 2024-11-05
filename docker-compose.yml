@@ -25,7 +25,18 @@ services:
     build:
       context: ./frontend
     ports:
-      - "80:80"
+      - "3000:3000"  # Port 3000 for development mode
+      - "80:80"      # Port 80 for production mode
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Useful for live reloading in Docker
+      - NODE_ENV=${NODE_ENV:-development}  # Switch between production and development
+    volumes:
+      - ./frontend:/app  # Mount the frontend code for live reloading in development
+    command: >
+      sh -c "if [ '$$NODE_ENV' = 'production' ]; 
+             then npm run build && nginx -g 'daemon off;'; 
+             else npm start; 
+             fi"
     depends_on:
       - app
 

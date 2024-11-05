@@ -21,6 +21,12 @@ COPY . .
 # Build the React app
 RUN npm run build
 
+# Debug: List the contents of the /app directory
+RUN ls -la /app
+
+# Debug: List the contents of the /app/build directory
+RUN ls -la /app/build
+
 # Use Nginx to serve the static files
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
